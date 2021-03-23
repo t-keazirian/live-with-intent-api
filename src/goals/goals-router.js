@@ -59,6 +59,7 @@ goalsRouter
 		res.json({
 			id: res.goal.id,
 			goal_name: res.goal.goal_name,
+      category: res.goal.category,
 			notes: res.goal.notes,
 		});
 	})

@@ -1,5 +1,5 @@
 function makeGoalsArray() {
-	return (
+	return [
 		{
 			id: 1,
 			goal_name: 'Brush Teeth',
@@ -30,7 +30,7 @@ function makeGoalsArray() {
 			category: 'Learn a skill',
 			notes: 'study for 20 min per day',
 		}
-	);
+  ];
 }
 
 module.exports = { makeGoalsArray };
