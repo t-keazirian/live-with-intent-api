@@ -70,7 +70,7 @@ goalsRouter
 			})
 			.catch(next);
 	})
-	.post(jsonParser, (req, res, next) => {
+	.patch(jsonParser, (req, res, next) => {
 		const { goal_name, category, notes } = req.body;
 		const goalToUpdate = { goal_name, category, notes };
 

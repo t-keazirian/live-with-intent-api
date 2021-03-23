@@ -128,4 +128,47 @@ describe.only('Goals endpoint', () => {
     })
   })
 
+  describe('PATCH /api/goals/:id', () => {
+    context('Given no goals', () => {
+      it('responds with 404', () => {
+        const id = 12345;
+        return supertest(app)
+          .patch(`/api/goals/${id}`)
+          .expect(404, {error: {message: `Goal doesn't exist`}})
+      })
+    })
+
+    context('Given there are goals in the db', () => {
+      const testGoals = makeGoalsArray();
+
+      beforeEach('insert goals', () => {
+        return db
+          .into('goals')
+          .insert(testGoals)
+      })
+
+      it('responds with 204 and the updated goal', () => {
+        const idToUpdate = 1;
+        const updatedGoal = {
+          goal_name: 'Updated goal name'
+        }
+        const expectedGoal = {
+          ...testGoals[idToUpdate - 1],
+          ...updatedGoal
+        }
+
+        return supertest(app)
+          .patch(`/api/goals/${idToUpdate}`)
+          .send(updatedGoal)
+          .expect(204)
+          .then(res => {
+            supertest(app).get(`/api/goals/${idToUpdate}`).expect(expectedGoal)
+          })
+
+      })
+    })
+  })
+
+
+
 });
