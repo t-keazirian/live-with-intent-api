@@ -6,5 +6,5 @@ module.exports = {
 	TEST_DATABASE_URL:
 		process.env.TEST_DATABASE_URL ||
 		'postgresql://dunder_mifflin@localhost/goals-test',
-	// CLIENT_ORIGIN: 'http://localhost:8000'
+	CLIENT_ORIGIN: 'https://live-with-intent.vercel.app/'
 };
