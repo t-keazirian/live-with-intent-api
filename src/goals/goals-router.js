@@ -64,7 +64,7 @@ goalsRouter
 		});
 	})
 	.delete((req, res, next) => {
-		GoalsService.deleteGoal(req.app.get('db'), req.params.id)
+		GoalsService.deleteGoal(req.app.get('db'), res.goal.id)
 			.then(() => {
 				res.status(204).end();
 			})
