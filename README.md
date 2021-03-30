@@ -11,6 +11,8 @@
 
 For the front-end repo, please visit [this GitHub link](https://github.com/t-keazirian/live-with-intent).
 
+#### This app is deployed through Heroku
+
 ##### This REST API allows you to:
 * GET:
   * Endpoint: /api/goals
