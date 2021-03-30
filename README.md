@@ -10,3 +10,14 @@
 #### Link to live app: https://live-with-intent.vercel.app/
 
 For the front-end repo, please visit [this GitHub link](https://github.com/t-keazirian/live-with-intent).
+
+#####This REST API allows you to:
+* GET:
+  * Endpoint: /api/goals
+* POST:
+  *Endpoint: /api/goals
+* DELETE
+  *Endpoint: /api/goals/:id
+* PATCH
+  *Endpoint: /api/goals/:id
+
