@@ -40,7 +40,6 @@ describe.only('Goals endpoint', () => {
 
 	describe('POST /api/goals', () => {
 		it('creates a goal, responding with 201 and the new goal', () => {
-
 			const newGoal = {
 				goal_name: 'New Goal',
 				category: 'Learn a skill',
@@ -65,110 +64,97 @@ describe.only('Goals endpoint', () => {
 		});
 	});
 
-  describe('DELETE /api/goals/:id', () => {
-    context('Given no goals', () => {
-      it('responds with 404', () => {
-        const id = 12345;
-        return supertest(app)
-          .delete(`/api/goals/${id}`)
-          .expect(404, {error: {message: `Goal doesn't exist`}})
-      })
-    })
+	describe('DELETE /api/goals/:id', () => {
+		context('Given no goals', () => {
+			it('responds with 404', () => {
+				const id = 12345;
+				return supertest(app)
+					.delete(`/api/goals/${id}`)
+					.expect(404, { error: { message: `Goal doesn't exist` } });
+			});
+		});
 
-    context('Given there are goals in the db', () => {
-      const testGoals = makeGoalsArray();
+		context('Given there are goals in the db', () => {
+			const testGoals = makeGoalsArray();
 
-      beforeEach('insert goals', () => {
-        return db
-          .into('goals')
-          .insert(testGoals)
-      })
+			beforeEach('insert goals', () => {
+				return db.into('goals').insert(testGoals);
+			});
 
-      it('responds with 204 and removes the goal', () => {
-        const idToRemove = 2;
-        const expectedGoals = testGoals.filter(goal => goal.id !== idToRemove)
+			it('responds with 204 and removes the goal', () => {
+				const idToRemove = 2;
+				const expectedGoals = testGoals.filter(goal => goal.id !== idToRemove);
 
-        return supertest(app)
-          .delete(`/api/goals/${idToRemove}`)
-          .expect(204)
-          .then(res => {
-            supertest(app).get('/api/goals').expect(expectedGoals)
-          })
-      })
+				return supertest(app)
+					.delete(`/api/goals/${idToRemove}`)
+					.expect(204)
+					.then(res => {
+						supertest(app).get('/api/goals').expect(expectedGoals);
+					});
+			});
+		});
+	});
 
-    })
-  })
+	describe('GET /api/goals/:id', () => {
+		context('Given no goals', () => {
+			it('responds with 404', () => {
+				const id = 12345;
+				return supertest(app)
+					.get(`/api/goals/${id}`)
+					.expect(404, { error: { message: `Goal doesn't exist` } });
+			});
+		});
 
-  describe('GET /api/goals/:id', () => {
-    context('Given no goals', () => {
-      it('responds with 404', () => {
-        const id = 12345;
-        return supertest(app)
-          .get(`/api/goals/${id}`)
-          .expect(404, {error: {message: `Goal doesn't exist`}})
-      })
-    })
+		context('Given there are goals in the db', () => {
+			const testGoals = makeGoalsArray();
 
-    context('Given there are goals in the db', () => {
-      const testGoals = makeGoalsArray();
+			beforeEach('insert goals', () => {
+				return db.into('goals').insert(testGoals);
+			});
 
-      beforeEach('insert goals', () => {
-        return db
-          .into('goals')
-          .insert(testGoals)
-      })
+			it('GET /api/goals/:id responds with 200 and the specified goal', () => {
+				const id = 3;
+				const expectedGoal = testGoals[id - 1];
+				return supertest(app).get(`/api/goals/${id}`).expect(200, expectedGoal);
+			});
+		});
+	});
 
-      it('GET /api/goals/:id responds with 200 and the specified goal', () => {
-        const id = 3;
-        const expectedGoal = testGoals[id - 1]
-        return supertest(app)
-          .get(`/api/goals/${id}`)
-          .expect(200, expectedGoal)
-      })
-    })
-  })
+	describe('PATCH /api/goals/:id', () => {
+		context('Given no goals', () => {
+			it('responds with 404', () => {
+				const id = 12345;
+				return supertest(app)
+					.patch(`/api/goals/${id}`)
+					.expect(404, { error: { message: `Goal doesn't exist` } });
+			});
+		});
 
-  describe('PATCH /api/goals/:id', () => {
-    context('Given no goals', () => {
-      it('responds with 404', () => {
-        const id = 12345;
-        return supertest(app)
-          .patch(`/api/goals/${id}`)
-          .expect(404, {error: {message: `Goal doesn't exist`}})
-      })
-    })
+		context('Given there are goals in the db', () => {
+			const testGoals = makeGoalsArray();
 
-    context('Given there are goals in the db', () => {
-      const testGoals = makeGoalsArray();
+			beforeEach('insert goals', () => {
+				return db.into('goals').insert(testGoals);
+			});
 
-      beforeEach('insert goals', () => {
-        return db
-          .into('goals')
-          .insert(testGoals)
-      })
+			it('responds with 204 and the updated goal', () => {
+				const idToUpdate = 1;
+				const updatedGoal = {
+					goal_name: 'Updated goal name',
+				};
+				const expectedGoal = {
+					...testGoals[idToUpdate - 1],
+					...updatedGoal,
+				};
 
-      it('responds with 204 and the updated goal', () => {
-        const idToUpdate = 1;
-        const updatedGoal = {
-          goal_name: 'Updated goal name'
-        }
-        const expectedGoal = {
-          ...testGoals[idToUpdate - 1],
-          ...updatedGoal
-        }
-
-        return supertest(app)
-          .patch(`/api/goals/${idToUpdate}`)
-          .send(updatedGoal)
-          .expect(204)
-          .then(res => {
-            supertest(app).get(`/api/goals/${idToUpdate}`).expect(expectedGoal)
-          })
-
-      })
-    })
-  })
-
-
-
+				return supertest(app)
+					.patch(`/api/goals/${idToUpdate}`)
+					.send(updatedGoal)
+					.expect(204)
+					.then(res => {
+						supertest(app).get(`/api/goals/${idToUpdate}`).expect(expectedGoal);
+					});
+			});
+		});
+	});
 });

@@ -61,6 +61,7 @@ goalsRouter
 			goal_name: res.goal.goal_name,
       category: res.goal.category,
 			notes: res.goal.notes,
+			post_date: res.goal.post_date
 		});
 	})
 	.delete((req, res, next) => {
